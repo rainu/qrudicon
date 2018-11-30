@@ -3,7 +3,7 @@
     <b-form @submit.prevent="onSubmit" novalidate>
       <b-form-group label="Size:">
         <b-input-group :prepend="sizeLabel">
-          <b-form-input type="range" v-model="form.size" min="128" max="4092"></b-form-input>
+          <b-form-input type="range" v-model="form.size" min="128" max="4096"></b-form-input>
         </b-input-group>
       </b-form-group>
 
@@ -52,7 +52,7 @@
       form: {
         size: {
           minValue: minValue(128),
-          maxValue: maxValue(4092),
+          maxValue: maxValue(4096),
         },
         text: {
           minLength: minLength(1),
