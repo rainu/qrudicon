@@ -22,9 +22,19 @@ module.exports = {
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       { hid: 'description', name: 'description', content: pkg.description }
     ],
-    link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/qrudicon/favicon.ico' }
-    ]
+  },
+
+  manifest: {
+    "display": "standalone",
+    "orientation": "portrait-primary",
+    "background_color": "#fff",
+    "theme_color": "#e9ecef",
+    "dir": "ltr",
+    "lang": "en-EN"
+  },
+
+  icon: {
+    sizes: [16, 32, 120, 144, 152, 192, 384, 512]
   },
 
   /*
