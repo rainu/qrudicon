@@ -1,34 +1,52 @@
 <template>
   <div>
-    <b-form @submit.prevent="onSubmit" novalidate>
-      <b-form-group label="Size:">
-        <b-input-group :prepend="sizeLabel">
-          <b-form-input type="range" v-model="form.size" min="128" max="4096"></b-form-input>
-        </b-input-group>
-      </b-form-group>
+    <form @submit.prevent="onSubmit">
+      <div class="form-group">
+        <label for="range-slider">Size: {{sizeLabel}}</label>
+        <input id="range-slider" type="range" v-model="form.size" class="form-control-range" min="128" max="4096" step="128" />
+      </div>
 
-      <b-form-group label="Text:">
-        <b-form-textarea v-model="form.text"
-                         placeholder="Enter something"
-                         :rows="5"
-                         :max-rows="6">
-        </b-form-textarea>
-      </b-form-group>
+      <div class="form-group">
+        <label for="text-field">Text:</label>
+        <textarea
+            id="text-field"
+            v-model="form.text"
+            placeholder="Enter something"
+            rows="5"
+            class="form-control"
+            required></textarea>
+      </div>
 
-      <b-form-group label="Type:">
-        <b-form-radio-group v-model="form.type">
-          <b-form-radio value="image/png">.png</b-form-radio>
-          <b-form-radio value="image/jpeg">.jpg</b-form-radio>
-        </b-form-radio-group>
-      </b-form-group>
+      <div class="form-group">
+        <label class="my-1 mr-2" for="qrudicon-type">Type:</label>
+        <select class="custom-select my-1 mr-sm-2" id="qrudicon-type" v-model="form.type">
+          <option value="image/png">.png</option>
+          <option value="image/jpeg">.jpg</option>
+        </select>
+      </div>
 
-      <b-button type="submit" variant="primary">Generate</b-button>
-    </b-form>
+      <div class="form-group container">
+        <div class="row">
+          <div class="col col-left">
+            <button type="reset" class="btn btn-block btn-warning" @click.prevent="onReset">Reset</button>
+          </div>
+          <div class="col col-right">
+            <button type="submit" class="btn btn-block btn-primary">Generate</button>
+          </div>
+        </div>
+      </div>
+    </form>
   </div>
 </template>
 
 <script>
   import { minValue, maxValue, minLength, maxLength } from 'vuelidate/lib/validators'
+
+  const defaultValues = {
+    size: 1024,
+    text: '',
+    type: 'image/png'
+  }
 
   export default {
     name: "generator-simple",
@@ -41,9 +59,9 @@
     data() {
       return {
         form: {
-          size: this.value.size || 1024,
-          text: this.value.text || '',
-          type: this.value.type || 'image/png'
+          size: this.value.size || defaultValues.size,
+          text: this.value.text || defaultValues.text,
+          type: this.value.type || defaultValues.type
         },
       }
     },
@@ -74,6 +92,12 @@
             ...this.form
           })
         }
+      },
+      onReset() {
+        this.form = {
+          ...defaultValues
+        }
+        this.$emit('input', {})
       }
     },
     computed: {
@@ -83,3 +107,12 @@
     }
   }
 </script>
+
+<style scoped>
+  .col-left {
+    padding-left: 0;
+  }
+  .col-right {
+    padding-right: 0;
+  }
+</style>

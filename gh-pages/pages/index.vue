@@ -1,15 +1,9 @@
 <template>
   <div>
-    <b-container class="bv-example-row">
-      <b-row>
-        <b-col >
-          <generator-simple v-model="imgSettings" />
-        </b-col>
-        <b-col >
-          <qrudicon v-model="imgSettings" />
-        </b-col>
-      </b-row>
-    </b-container>
+    <generator-simple v-model="imgSettings" />
+
+    <hr v-if="imgSettings.text" />
+    <qrudicon v-model="imgSettings" />
   </div>
 </template>
 
@@ -25,6 +19,16 @@
     data() {
       return {
         imgSettings: {},
+      }
+    },
+    watch: {
+      imgSettings: {
+        deep: true,
+        handler() {
+          setTimeout(() => {
+            window.scrollTo(0, document.body.scrollHeight)
+          }, 500)
+        }
       }
     }
   }

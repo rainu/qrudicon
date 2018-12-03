@@ -1,19 +1,12 @@
 <template>
   <div>
-    <b-card border-variant="primary"
-            :img-src="qrudiconLink"
-            img-alt="qrudicon"
-            style="max-width: 20rem;"
-            class="mb-2"
-            v-if="qrudiconLink">
-
-      <b-button id="qrudicon-copy-link" variant="primary" @click="copyLink">Copy Link</b-button>
-      <input type="hidden" v-model="qrudiconLink" ref="linkinput" />
-
-      <b-popover :show.sync="show" target="qrudicon-copy-link" title="Success" placement="top">
-        Link copied to clipboard!
-      </b-popover>
-    </b-card>
+    <div class="card" v-if="qrudiconLink" :class="{ 'bg-success': show }">
+      <div class="card-body">
+        <img :src="qrudiconLink" :alt="qrudiconLink" class="card-img" />
+        <button class="btn btn-primary btn-block" @click="copyLink">Copy Link</button>
+        <input type="hidden" v-model="qrudiconLink" ref="linkinput" />
+      </div>
+    </div>
   </div>
 </template>
 

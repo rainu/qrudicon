@@ -1,12 +1,14 @@
 <template>
   <div>
-    <b-container>
-      <b-jumbotron header="qrudicon" lead="A combination of QR-Code and Identicon">
-        <hr class="my-4">
+    <div class="container">
+      <div class="jumbotron">
+        <h1>qrudicon</h1>
+        <p>A combination of QR-Code and Identicon</p>
 
+        <hr />
         <nuxt/>
-      </b-jumbotron>
-    </b-container>
+      </div>
+    </div>
   </div>
 </template>
 
