@@ -3,29 +3,30 @@ package main
 import (
 	"bytes"
 	"encoding/base64"
-	"image"
-	"log"
-	"strconv"
-	"strings"
-
 	"github.com/aws/aws-lambda-go/events"
 	"github.com/aws/aws-lambda-go/lambda"
+	"github.com/emersion/go-vcard"
+	"image"
 	"image/jpeg"
 	"image/png"
+	"log"
 	"net/http"
 	"qrudicon/lib"
+	"strconv"
+	"strings"
 )
 
 const (
 	DefaultSize = 1024
 	MaxSize     = 4092
+	VCardPrefix = "VC_"
 )
 
 type Response events.APIGatewayProxyResponse
 
 // Handler is our lambda handler invoked by the `lambda.Start` function call
 func Handler(request events.APIGatewayProxyRequest) (Response, error) {
-	img := lib.NewSimpleQrudicon(getText(&request), getImageSize(&request))
+	img := lib.NewSimpleQrudicon(getContent(&request), getImageSize(&request))
 
 	b64Encoded, contentType := encode(&request, img)
 
@@ -61,6 +62,43 @@ func getImageSize(request *events.APIGatewayProxyRequest) uint {
 	}
 
 	return uint(size)
+}
+
+func getContent(request *events.APIGatewayProxyRequest) string {
+	switch request.Path {
+	case "/simple":
+		return getText(request)
+	case "/vcard":
+		return getVCard(request)
+	}
+
+	return ""
+}
+
+func getVCard(request *events.APIGatewayProxyRequest) string {
+	card := vcard.Card{}
+
+	switch request.HTTPMethod {
+	case http.MethodGet:
+		for pName, pValue := range request.QueryStringParameters {
+			if strings.HasPrefix(pName, VCardPrefix) {
+				normalizedParamName := pName[len(VCardPrefix):]
+
+				log.Printf("Use vcard field '%s' with value '%s'", normalizedParamName, pValue)
+				card.SetValue(normalizedParamName, pValue)
+			}
+		}
+	}
+
+	vcard.ToV4(card)
+
+	buf := new(bytes.Buffer)
+	err := vcard.NewEncoder(buf).Encode(card)
+	if err != nil {
+		panic(err)
+	}
+
+	return buf.String()
 }
 
 func getText(request *events.APIGatewayProxyRequest) string {

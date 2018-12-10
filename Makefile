@@ -1,5 +1,5 @@
 build:
-	env GOOS=linux go build -ldflags="-s -w" -o bin/simple aws/simple.go
+	env GOOS=linux go build -ldflags="-s -w" -o bin/qrudicon aws/lambda.go
 
 .PHONY: clean
 clean:
@@ -7,7 +7,7 @@ clean:
 
 .PHONY: deploy
 deploy: build
-	sls deploy function -f simple --verbose
+	sls deploy function -f qrudicon --verbose
 
 .PHONY: install
 install: clean build

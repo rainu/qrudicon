@@ -34,8 +34,8 @@ package:
    - ./bin/**
 
 functions:
-  simple:
-    handler: bin/simple
+  qrudicon:
+    handler: bin/qrudicon
     timeout: 10
     events:
       - http:
@@ -43,6 +43,9 @@ functions:
           method: post
       - http:
           path: simple
+          method: get
+      - http:
+          path: vcard
           method: get
 
 custom:
