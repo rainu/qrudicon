@@ -1,0 +1,6 @@
+{
+  "API_ENDPOINT": {
+    "simple": "https://vt8ts3lxil.execute-api.eu-central-1.amazonaws.com/dev/simple",
+    "vcard": "https://vt8ts3lxil.execute-api.eu-central-1.amazonaws.com/dev/vcard"
+  }
+}
