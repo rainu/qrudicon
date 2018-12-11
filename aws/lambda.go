@@ -26,7 +26,8 @@ type Response events.APIGatewayProxyResponse
 
 // Handler is our lambda handler invoked by the `lambda.Start` function call
 func Handler(request events.APIGatewayProxyRequest) (Response, error) {
-	img := lib.NewSimpleQrudicon(getContent(&request), getImageSize(&request))
+	qrContent, idContent := getContent(&request)
+	img := lib.NewExtendedQrudicon(qrContent, idContent, getImageSize(&request))
 
 	b64Encoded, contentType := encode(&request, img)
 
@@ -64,15 +65,23 @@ func getImageSize(request *events.APIGatewayProxyRequest) uint {
 	return uint(size)
 }
 
-func getContent(request *events.APIGatewayProxyRequest) string {
+func getContent(request *events.APIGatewayProxyRequest) (string, string) {
+	var qrContent string
+	var idContent string
+
 	switch request.Path {
 	case "/simple":
-		return getText(request)
+		qrContent = getText(request)
+		idContent = qrContent
 	case "/vcard":
-		return getVCard(request)
+		qrContent = getVCard(request)
+		idContent = getText(request)
+		if idContent == "" {
+			idContent = qrContent
+		}
 	}
 
-	return ""
+	return qrContent, idContent
 }
 
 func getVCard(request *events.APIGatewayProxyRequest) string {

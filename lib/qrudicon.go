@@ -6,8 +6,12 @@ import (
 )
 
 func NewSimpleQrudicon(content string, size uint) image.Image {
-	qrImage := qrudiconImage.NewQR(size, content)
-	identiconImg := qrudiconImage.NewIdenticon(uint(size/4), content)
+	return NewExtendedQrudicon(content, content, size)
+}
+
+func NewExtendedQrudicon(qrContent, idContent string, size uint) image.Image {
+	qrImage := qrudiconImage.NewQR(size, qrContent)
+	identiconImg := qrudiconImage.NewIdenticon(uint(size/4), idContent)
 	mergedImage := qrudiconImage.MergeQrudicon(qrImage, identiconImg)
 
 	return mergedImage
