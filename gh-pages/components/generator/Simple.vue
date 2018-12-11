@@ -40,12 +40,14 @@
 </template>
 
 <script>
+  import cfg from '../../static/config'
   import { minValue, maxValue, minLength, maxLength } from 'vuelidate/lib/validators'
 
   const defaultValues = {
     size: 1024,
     text: '',
-    type: 'image/png'
+    type: 'image/png',
+    link: cfg.API_ENDPOINT.simple
   }
 
   export default {
@@ -88,6 +90,8 @@
 
         //emit only valid data
         if(!this.$v.form.$error) {
+          this.form.link = `${cfg.API_ENDPOINT.simple}?t=${this.form.text}&s=${this.form.size}&e=${this.form.type}`
+
           this.$emit('input', {
             ...this.form
           })

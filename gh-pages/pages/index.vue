@@ -1,24 +1,48 @@
 <template>
   <div>
-    <generator-simple v-model="imgSettings" />
+    <ul class="nav nav-tabs" role="tablist">
+      <li class="nav-item">
+        <a class="nav-link" role="tab" :class="{ 'active': mode === 'simple' }" @click="setMode('simple')">Simple</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" role="tab" :class="{ 'active': mode === 'vcard' }" @click="setMode('vcard')">VCard</a>
+      </li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane fade show active border" role="tabpanel" aria-labelledby="home-tab">
+        <generator-simple v-model="imgSettings" v-if="mode === 'simple'"/>
+        <generator-vcard v-model="imgSettings" v-else-if="mode === 'vcard'"/>
+      </div>
+    </div>
+
 
     <hr v-if="imgSettings.text" />
-    <qrudicon v-model="imgSettings" />
+    <qrudicon v-model="imgSettings.link" :mode="mode" />
   </div>
 </template>
 
 <script>
   import GeneratorSimple from "../components/generator/Simple";
+  import GeneratorVcard from "../components/generator/Vcard";
   import Qrudicon from "../components/Qrudicon";
 
   export default {
     components: {
       Qrudicon,
-      GeneratorSimple
+      GeneratorSimple,
+      GeneratorVcard,
     },
     data() {
       return {
-        imgSettings: {},
+        mode: 'simple',
+        imgSettings: {
+          link: '',
+        },
+      }
+    },
+    methods: {
+      setMode(mode) {
+        this.mode = mode;
       }
     },
     watch: {
@@ -34,5 +58,11 @@
   }
 </script>
 
-<style>
+<style scoped>
+  .nav > li {
+    cursor: pointer;
+  }
+  .tab-pane {
+    padding: 1em;
+  }
 </style>
